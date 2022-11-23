@@ -6,11 +6,10 @@
 /*   By: pbunaciu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 07:57:13 by pbunaciu          #+#    #+#             */
-/*   Updated: 2022/11/23 15:04:56 by pbunaciu         ###   ########.fr       */
+/*   Updated: 2022/11/23 17:26:28 by pbunaciu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
-#include <string.h>
 size_t	ft_strlen(const	char *str)
 {
 	int	i;
@@ -21,9 +20,8 @@ size_t	ft_strlen(const	char *str)
 	return (i);
 }
 
-char	*strjoin(char *s1, char *s2)
+char	*strjoin(char *s1, char *s2, int len)
 {
-	size_t	len1;
 	char	*new;
 	size_t	i;
 	size_t	j;
@@ -34,15 +32,13 @@ char	*strjoin(char *s1, char *s2)
        s1 = ft_strdup("");
     if (!s2)
 		return (NULL);
-	len1 = ft_strlen(s1) + ft_strlen(s2);
-	new = (char *)malloc(sizeof(char) * (len1 + 1));
+	new = (char *)malloc(sizeof(char) * (len));
 	if (new == NULL)
 		return (NULL);
 	while (s1[i++] != '\0')
 		new[i] = s1[i];
 	while (s2[j] != '\0')
 		new[i++] = s2[j++];
-	new[i] = '\0';
 	free (s1);
     free (s2);
     return (new);
@@ -64,43 +60,38 @@ char	*ft_strchr(const char *s, int c)
 }
 
 
-char	*row_finder(char *temp)
+char	*read_save(int fd, char *temp)
 {
-    static int i;
+    int r = 0;
     int j = 0;
-    char    *line;
+    char    *temp2;
+    char    *buf;
 
-    
-    while (temp[i++] != '\n' )
-        i++;
-    line = malloc(sizeof(char) * (ft_strlen(temp)));
-    if (temp[i] == '\n')
-    {
-        while (j++ <= i)
-            line[j] = temp[j];
-    return(line);
-    }  
-    i++;
-return (0);
+	if (fd < 0 || BUFFER_SIZE <= 0)
+        return (NULL);
+    buf = malloc(sizeof(char) * (BUFFER_SIZE));
+        if (!buf)
+            return (NULL);
+    while (!ft_strchr(temp, '\n')) 
+    {    
+        r = (read(fd, buf, BUFFER_SIZE));	
+            if (r <= 0)
+                return NULL;
+    temp2 = malloc(sizeof(char) * (BUFFER_SIZE));
+        if (!temp2)
+            return NULL;
+            temp2 = temp;
+            j = ft_strlen(temp2);
+            temp = strjoin(temp2, buf, j);
+            free (temp2);
+    }
+    return(temp2);
 }
 char	*get_next_line(int fd)
 {
+    char    *ret;
     static char *temp;
-    char    *buf;
-    char    *print;
-    int i;
+    ret = (read_save(fd, temp));
 
-
-	if (fd <= 0 || BUFFER_SIZE <= 0)
-        return (-1);
-    
-    buf = malloc(BUFFER_SIZE) * (sizeof(char));
-    while (!ft_strchr(temp, '\n') && i = (read(fd, buf, BUFFER_SIZE)))	
-        {
-            if (i <= 0)
-                return (-1);
-    
-            temp = strjoin(temp, buf);
-            row_finder(temp)
-    return(print);
+    return(ret);
 }

@@ -6,7 +6,7 @@
 /*   By: pbunaciu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 07:57:29 by pbunaciu          #+#    #+#             */
-/*   Updated: 2022/11/23 13:51:42 by pbunaciu         ###   ########.fr       */
+/*   Updated: 2022/11/23 17:22:06 by pbunaciu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -31,4 +31,3 @@ char	*ft_strdup(const char *s1)
 	copy[i] = '\0';
 	return (copy);
 }
-
