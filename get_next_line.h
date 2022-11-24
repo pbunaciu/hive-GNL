@@ -6,7 +6,7 @@
 /*   By: pbunaciu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 07:57:21 by pbunaciu          #+#    #+#             */
-/*   Updated: 2022/11/23 17:25:35 by pbunaciu         ###   ########.fr       */
+/*   Updated: 2022/11/24 11:55:26 by pbunaciu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef GET_NEXT_LINE_H
@@ -24,7 +24,7 @@ typedef	struct s_list
 char	*get_next_line(int fd);
 char    *ft_strdup(const char *s1);
 size_t  ft_strlen(const char *str);
-char    *strjoin(char *s1, char *s2, int len);
+char    *strjoin(char *s1, char *s2);
 char    *ft_strchr(const char *s, int c);
 char    *read_save(int fd, char *temp);
 
