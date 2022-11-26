@@ -45,16 +45,12 @@ char	*strjoin(char *s1, char *s2)
     }
         while (s2[j] != '\0')
 		new[i++] = s2[j++];
-	free (s1);
-    free (s2);
     return (new);
 }
 char	*ft_strchr(const char *s, int c)
 {
 	char	*str;
-	char	*null;
 
-	null = 0;
 	str = (char *)s;
 	while (*str != '\0')
 	{
@@ -64,86 +60,101 @@ char	*ft_strchr(const char *s, int c)
 	}
 	return (NULL);
 }
-
-char    *find_newline(char *stash)
+char    *find_nextline(char *stash)
 {
-    int i;
-    int j;
+    int     i;
+    int     j;
+    char    *line_ret;
+
     i = 0;
     j = 0;
-    char    *line_ret;
-    char    *tempbuf;
-    
-    while (stash[i] != '\0')
-    {
-        if (stash[i] != '\n')
-            i++;
-        if (stash[i] == '\n')
-        {
-            if (stash[i] == '\n' && i == 0)
-                i = 1;
-            line_ret = malloc(sizeof(char) * i + 1);
-            if (!line_ret)
-                return (NULL);
-            while (j < i)
-            {
-                line_ret[j] = stash[j];
-                j++;
-            }
-            line_ret[j++] = '\0';
-            tempbuf = malloc(sizeof(char) * i + 1);
-            tempbuf = ft_strchr(stash, '\n');
-            //free (stash);
-            stash = ft_strdup(tempbuf);
-            
-         }
+    while (stash[i] && stash[i] != '\n')
         i++;
-
+    if (!stash[i])
+    {
+        free (stash);
+        return (NULL);
     }
-    if (stash[i] == '\0')
-        return(stash);
+    line_ret = malloc(sizeof(char) * (ft_strlen(stash) - i + 1));
+        if (!line_ret)
+            return (NULL);
+    i++;
+    while (stash[i])
+        line_ret[j++] = stash[i++];
+    free (stash);
     return (line_ret);
-
 }
-
-char	*read_save(int fd, char *stash)
+char    *find_newline(char *stash)
+{
+    int j;
+    j = 0;
+    char    *line_ret;
+    
+    if (!stash[j])
+        return(NULL);
+    while (stash[j] && stash[j] != '\n')
+        j++;
+    line_ret = malloc(sizeof(char) * (j + 2));
+        if (!line_ret)
+            return (NULL);
+    j = 0;
+    while (stash[j] && stash[j] != '\n')
+    {
+        line_ret[j] = stash[j];
+        j++;
+    }
+    if (stash[j] && stash[j] == '\n')
+        line_ret[j++] = '\n';
+    return (line_ret);
+}
+char    *join_free(char *stash, char *buf)
 {
     char    *temp;
+
+    temp = strjoin(stash, buf);
+    free(stash);
+    return (temp);
+}
+char	*read_save(int fd, char *stash)
+{
     char    *buf;
     int     read_byte;
 
-    read_byte = 0;
-    buf = malloc(sizeof(char) * (BUFFER_SIZE));
+    read_byte = 1;
+    buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
         if (!buf)
             return (NULL);
     if (!stash)
         stash = ft_strdup("");
-    while (!ft_strchr(stash, '\n')) 
+    while (read_byte > 0) 
     {    
         read_byte = (read(fd, buf, BUFFER_SIZE));
-        if (read_byte <= 0)
+        if (read_byte == -1)
         {
             free (buf);
             free (stash);
             return (NULL);
         }        
-        temp = ft_strdup(stash);
-        free(stash);
-        stash = strjoin(temp, buf);
+        stash[read_byte] = 0;
+        stash = join_free(stash, buf);
+        if (ft_strchr(stash, '\n'))
+            break;
     }
-    //if (ft_strchr(stash, '\n'))
-        return(find_newline(stash));
-    
-    
-    free (stash);
     free (buf);
-    return(NULL);
+    return(stash);
 }
 char	*get_next_line(int fd)
 {
+    char        *line_ret;
     static char *stash;
 
     if (read(fd, NULL, 0) < 0 || BUFFER_SIZE <= 0)
         return (NULL);
-    return(read_save(fd, stash));
+    stash = (read_save(fd, stash));
+    if (!stash)
+        return (NULL);
+    line_ret = find_newline(stash);
+    stash = find_nextline(stash);
+    return (line_ret);
+    
 }
