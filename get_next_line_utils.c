@@ -6,7 +6,7 @@
 /*   By: pbunaciu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 07:57:29 by pbunaciu          #+#    #+#             */
-/*   Updated: 2022/11/25 12:10:14 by pbunaciu         ###   ########.fr       */
+/*   Updated: 2022/11/28 16:54:47 by pbunaciu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -20,7 +20,7 @@ char	*ft_strdup(const char *s1)
 	i = 0;
 	while (s1[len])
 		len++;
-	copy = (char *)malloc(sizeof(char) * len);
+	copy = (char *)malloc(sizeof(char) * len + 1);
 	if (copy == NULL)
 		return (NULL);
 	while (s1[i])

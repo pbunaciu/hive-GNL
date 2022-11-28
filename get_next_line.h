@@ -6,15 +6,18 @@
 /*   By: pbunaciu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 07:57:21 by pbunaciu          #+#    #+#             */
-/*   Updated: 2022/11/24 14:34:46 by pbunaciu         ###   ########.fr       */
+/*   Updated: 2022/11/28 16:16:26 by pbunaciu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef GET_NEXT_LINE_H
+# ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-//#ifndef BUFFER_SIZE
-#// define BUFFER_SIZE 4096
+
+# ifndef BUFFER_SIZE
+# define BUFFER_SIZE 4096
+# endif
 # include <stdlib.h>
 # include <unistd.h>
+
 typedef	struct s_list
 {
 	void			*content;

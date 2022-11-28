@@ -6,7 +6,7 @@
 /*   By: pbunaciu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 07:57:13 by pbunaciu          #+#    #+#             */
-/*   Updated: 2022/11/25 15:38:08 by pbunaciu         ###   ########.fr       */
+/*   Updated: 2022/11/28 18:43:37 by pbunaciu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -31,9 +31,7 @@ char	*strjoin(char *s1, char *s2)
 	i = 0;
 	j = 0;
     len = ft_strlen(s1) + ft_strlen(s2);
-	if (!s1)
-       s1 = ft_strdup("");
-    if (!s2)
+    if (!s1 || !s2)
 		return (NULL);
 	new = (char *)malloc(sizeof(char) * (len));
 	if (new == NULL)
@@ -121,13 +119,14 @@ char	*read_save(int fd, char *stash)
     int     read_byte;
 
     read_byte = 1;
-    buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-        if (!buf)
-            return (NULL);
     if (!stash)
         stash = ft_strdup("");
     while (read_byte > 0) 
     {    
+        buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+            if (!buf)
+                return (NULL);
+        buf[BUFFER_SIZE] = '\0';
         read_byte = (read(fd, buf, BUFFER_SIZE));
         if (read_byte == -1)
         {
@@ -135,7 +134,6 @@ char	*read_save(int fd, char *stash)
             free (stash);
             return (NULL);
         }        
-        stash[read_byte] = 0;
         stash = join_free(stash, buf);
         if (ft_strchr(stash, '\n'))
             break;
