@@ -21,7 +21,7 @@ int main()
     int fd;
 
 
-    fd = open("gnlTester/files/test.txt", O_RDONLY);
+    fd = open("gnlTester/files/42_with_nl", O_RDONLY);
      
     while(i < 2)
       {
