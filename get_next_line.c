@@ -6,7 +6,7 @@
 /*   By: pbunaciu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 07:57:13 by pbunaciu          #+#    #+#             */
-/*   Updated: 2022/11/28 18:43:37 by pbunaciu         ###   ########.fr       */
+/*   Updated: 2022/11/29 12:54:20 by pbunaciu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -24,6 +24,7 @@ char    *find_nextline(char *stash)
     if (!stash[i])
     {
         free (stash);
+        stash = NULL;
         return (NULL);
     }
     line_ret = malloc(sizeof(char) * (ft_strlen(stash) - i + 1));
@@ -33,6 +34,7 @@ char    *find_nextline(char *stash)
     while (stash[i])
         line_ret[j++] = stash[i++];
     free (stash);
+    stash = NULL;
     return (line_ret);
 }
 char    *find_newline(char *stash)
@@ -42,8 +44,11 @@ char    *find_newline(char *stash)
     char    *line_ret;
     
     if (!stash[j])
+    {
+        //stash = NULL;
         return (NULL);
-    while (stash[j] && stash[j] != '\n')
+    }
+        while (stash[j] && stash[j] != '\n')
         j++;
     line_ret = malloc(sizeof(char) * (j + 2));
         if (!line_ret)
@@ -56,12 +61,14 @@ char    *find_newline(char *stash)
     }
     if (stash[j] && stash[j] == '\n')
         line_ret[j++] = '\n';
+    line_ret[j] = '\0';
     return (line_ret);
 }
 char    *join_free(char *stash, char *buf)
 {
     char    *temp;
     temp = strjoin(stash, buf);
+    free (stash);
     return (temp);
 }
 char	*read_save(int fd, char *stash)
@@ -71,32 +78,34 @@ char	*read_save(int fd, char *stash)
 
     read_byte = 1;
     if (!stash)
-        stash = ft_strdup("");
+        stash = ft_calloc(1, 1);
     while (read_byte > 0) 
     {    
         buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
             if (!buf)
                 return (NULL);
-        buf[BUFFER_SIZE] = 0;
         read_byte = (read(fd, buf, BUFFER_SIZE));
         if (read_byte == -1)
         {
             free (buf);
             return (NULL);
         }        
+        buf[read_byte] = 0;
         stash = join_free(stash, buf);
         if (ft_strchr(stash, '\n'))
             break;
-    }
-    if (buf)
         free (buf);
+        buf = NULL;
+    }
+    //if (buf)
+    free (buf);
+    buf = NULL;
     return(stash);
 }
 char	*get_next_line(int fd)
 {
     char        *line_ret;
     static char *stash;
-
     if (fd < 0 || read(fd, NULL, 0) < 0 || BUFFER_SIZE <= 0)
         return (NULL);
     stash = (read_save(fd, stash));

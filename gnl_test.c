@@ -6,7 +6,7 @@
 /*   By: pbunaciu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 12:24:00 by pbunaciu          #+#    #+#             */
-/*   Updated: 2022/11/28 18:18:29 by pbunaciu         ###   ########.fr       */
+/*   Updated: 2022/11/29 12:41:09 by pbunaciu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -21,9 +21,9 @@ int main()
     int fd;
 
 
-    fd = open("gnlTester/files/42_with_nl", O_RDONLY);
+    fd = open("gnlTester/files/multiple_line_no_nl", O_RDONLY);
      
-    while(i < 2)
+    while(i < 20)
       {
         file = get_next_line(fd);
         printf("%s", file);
