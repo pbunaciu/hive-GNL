@@ -1,15 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbunaciu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 07:57:13 by pbunaciu          #+#    #+#             */
-/*   Updated: 2022/12/13 10:37:40 by pbunaciu         ###   ########.fr       */
+/*   Updated: 2022/12/13 10:38:13 by pbunaciu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*find_nextline(char *stash, int *error)
 {
@@ -92,21 +92,21 @@ char	*read_save(int fd, char *stash)
 char	*get_next_line(int fd)
 {
 	char		*line_ret;
-	static char	*stash;
+	static char	*stash[OPEN_MAX];
 	int			error;
 
 	error = 0;
 	if (fd < 0 || read(fd, NULL, 0) < 0)
 		return (NULL);
-	if (!stash)
-		stash = ft_calloc(1, 1);
-	if (!stash)
+	if (!stash[fd])
+		stash[fd] = ft_calloc(1, 1);
+	if (!stash[fd])
 		return (NULL);
-	stash = (read_save(fd, stash));
-	if (!stash)
+	stash[fd] = (read_save(fd, stash[fd]));
+	if (!stash[fd])
 		return (NULL);
-	line_ret = find_newline(stash);
-	stash = find_nextline(stash, &error);
+	line_ret = find_newline(stash[fd]);
+	stash[fd] = find_nextline(stash[fd], &error);
 	if (error)
 	{
 		free (line_ret);

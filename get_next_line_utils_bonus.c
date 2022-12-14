@@ -1,15 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbunaciu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 07:57:29 by pbunaciu          #+#    #+#             */
-/*   Updated: 2022/12/13 10:38:47 by pbunaciu         ###   ########.fr       */
+/*   Updated: 2022/12/13 10:07:03 by pbunaciu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_strchr(char *s, int c)
 {
@@ -37,10 +37,10 @@ char	*strjoin(char *s1, char *s2)
 	i = 0;
 	j = 0;
 	len = ft_strlen(s1) + ft_strlen(s2);
-	if (!s1 || !s2)
+	if (!s1 && !s2)
 		return (NULL);
 	new = (char *)malloc(sizeof(char) * (len + 1));
-	if (new == NULL)
+	if (!new)
 		return (NULL);
 	while (s1 && s1[i] != '\0')
 	{
